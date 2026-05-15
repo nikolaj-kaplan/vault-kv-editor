@@ -1,0 +1,80 @@
+{
+  "name": "vault-kv-editor",
+  "displayName": "Vault KV Editor",
+  "description": "Edit HashiCorp Vault KV secrets as nested JSON. Keys like \"Database:Connection:Host\" are shown as a nested object tree while editing, then flattened back on save.",
+  "version": "0.1.0",
+  "publisher": "drdk",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nikolaj-kaplan/vault-kv-editor"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": ["onFileSystem:vault"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "vaultKvEditor.openSecret",
+        "title": "Vault: Open Secret as JSON"
+      },
+      {
+        "command": "vaultKvEditor.storeToken",
+        "title": "Vault: Store Token (Secure Storage)"
+      },
+      {
+        "command": "vaultKvEditor.clearToken",
+        "title": "Vault: Clear Stored Token"
+      }
+    ],
+    "configuration": {
+      "title": "Vault KV Editor",
+      "properties": {
+        "vaultKvEditor.vaultAddress": {
+          "type": "string",
+          "default": "https://vault.example.com",
+          "description": "Vault server address. Falls back to VAULT_ADDR environment variable."
+        },
+        "vaultKvEditor.kvVersion": {
+          "type": "number",
+          "default": 2,
+          "enum": [1, 2],
+          "enumDescriptions": [
+            "KV Secrets Engine v1",
+            "KV Secrets Engine v2 (recommended)"
+          ],
+          "description": "KV secrets engine version."
+        },
+        "vaultKvEditor.namespace": {
+          "type": "string",
+          "default": "",
+          "description": "Vault namespace (Enterprise only). Falls back to VAULT_NAMESPACE env var."
+        },
+        "vaultKvEditor.defaultMount": {
+          "type": "string",
+          "default": "secret",
+          "description": "Default KV mount path pre-filled in the Open Secret prompt."
+        },
+        "vaultKvEditor.tlsSkipVerify": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disable TLS certificate verification. Only use in dev environments with self-signed certificates."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.0.0",
+    "typescript": "^5.3.0"
+  }
+}
